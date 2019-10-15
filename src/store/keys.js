@@ -1,0 +1,8 @@
+export const LOGIN_STATE = 'login-state'
+export const USER_STATE = 'user-state'
+export const SERVER_STATE = 'server-state'
+export const TOKEN_STATE = 'token-state'
+export const ATTRIBUTE_STATE = 'attribute-state'
+export const ACTION_STATE = 'action-state'
+export const ALARM_STATE = 'alarm-state'
+export const LOG_STATE = 'log-state'
