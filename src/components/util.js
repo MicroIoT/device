@@ -1,4 +1,4 @@
-import store from '../store'
+// import store from '../store'
 import { stomp } from './stomp'
 
 export function getTypeInfo (dataType) {
@@ -47,5 +47,5 @@ export function formatDate (date, simple) {
 }
 export function initSystem () {
   stomp.connect()
-  store.commit('initAttribute')
+  // store.commit('initAttribute')
 }

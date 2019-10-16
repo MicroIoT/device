@@ -60,8 +60,6 @@ export default {
     },
     attInput () {
       let definition = {}
-      let d = this.attDefinition[this.name]
-      d.optional = false
       definition[this.name] = this.attDefinition[this.name]
       return definition
     },

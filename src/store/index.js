@@ -25,11 +25,6 @@ const localStoragePlugin = store => {
         window.localStorage.setItem(keys.LOGIN_STATE, JSON.stringify(state.user.logined))
         window.localStorage.setItem(keys.USER_STATE, JSON.stringify(state.user.user))
       }
-      if (type === 'setAttribute') {
-        let user = window.localStorage.getItem(keys.USER_STATE)
-        let username = JSON.parse(user).deviceAccount.username
-        window.localStorage.setItem(username + '.' + keys.ATTRIBUTE_STATE, JSON.stringify(state.attribute.attribute))
-      }
     } catch (e) {
       Notify.create({
         message: '请检查存储空间。'
