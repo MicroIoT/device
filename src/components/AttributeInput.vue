@@ -77,8 +77,7 @@ export default {
   props: ['attDefinition', 'title', 'subTitle', 'type', 'indexName', 'edit'],
   data () {
     return {
-      step: 0,
-      choice: ''
+      step: 0
     }
   },
   created: function () {
@@ -384,7 +383,6 @@ export default {
           }
         } else {
           var passinfo = this.$store.getters.passInfo(this.getIndexName(key))
-
           if (passinfo === undefined && !value.optional) {
             valid = false
             value.error = true

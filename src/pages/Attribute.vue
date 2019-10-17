@@ -55,7 +55,7 @@ export default {
       if (!this.edit) {
         return '编辑'
       } else {
-        return '确定'
+        return '保存'
       }
     },
     attInput () {
