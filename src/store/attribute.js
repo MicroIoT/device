@@ -1,5 +1,8 @@
+import * as keys from './keys'
+
 const state = {
-  attribute: {}
+  attribute: JSON.parse(window.localStorage.getItem(
+    JSON.parse(localStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ATTRIBUTE_STATE))
 }
 
 const getters = {
@@ -14,6 +17,9 @@ const mutations = {
   setAttribute (state, value) {
     let k = Object.keys(value)[0]
     let v = value[k]
+    if (state.attribute === null) {
+      state.attribute = {}
+    }
     state.attribute[k] = v
   }
 }

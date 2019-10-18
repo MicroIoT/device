@@ -12,16 +12,11 @@
           <q-list highlight separator>
             <q-item v-for="(alarmKey) in Object.keys(alarmTypes)" :key="alarmKey" >
               <q-item-section avatar v-if="$q.screen.gt.xs">
-                <q-icon color="primary" name="location_city" />
+                <q-icon color="primary" name="notification_important" />
               </q-item-section>
               <q-item-section @click="goto(siteType.id)" class="cursor-pointer">
                 <q-item-label >{{alarmKey}}</q-item-label>
                 <q-item-label caption>{{alarmTypes[alarmKey].description}}</q-item-label>
-              </q-item-section>
-              <q-item-section side @click="goto(siteType.id)">
-                <q-btn color="secondary" size="12px" flat dense round icon="notifications_active" >
-                  <q-tooltip>上报</q-tooltip>
-                </q-btn>
               </q-item-section>
               <q-item-section side @click="goto(siteType.id)">
                 <q-btn color="secondary" size="12px" flat dense round icon="info" >

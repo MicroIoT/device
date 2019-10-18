@@ -12,16 +12,11 @@
           <q-list highlight separator>
             <q-item v-for="(attKey) in Object.keys(attDefinition)" :key="attKey" >
               <q-item-section avatar v-if="$q.screen.gt.xs">
-                <q-icon color="primary" name="location_city" />
+                <q-icon color="primary" name="format_list_bulleted" />
               </q-item-section>
-              <q-item-section @click="goto(siteType.id)" class="cursor-pointer">
+              <q-item-section @click="goto(attKey)" class="cursor-pointer">
                 <q-item-label >{{attKey}}</q-item-label>
                 <q-item-label caption>{{attDefinition[attKey].description}}</q-item-label>
-              </q-item-section>
-              <q-item-section side @click="goto(siteType.id)">
-                <q-btn color="secondary" size="12px" flat dense round icon="publish" >
-                  <q-tooltip>上报</q-tooltip>
-                </q-btn>
               </q-item-section>
               <q-item-section side @click="goto(attKey)">
                 <q-btn color="secondary" size="12px" flat dense round icon="info" >

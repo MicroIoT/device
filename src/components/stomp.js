@@ -3,6 +3,7 @@ import ReconnectingWebSocket from 'ReconnectingWebSocket'
 import store from '../store'
 import { http } from './http'
 import { Notify } from 'quasar'
+import { toDataValue } from './util'
 
 const operationTopic = '/topic/operation.'
 const resultTopic = '/topic/result.'
@@ -56,12 +57,17 @@ class StompClient {
         response.error = 'attribute not set'
         this.client.send(topic, {}, JSON.stringify(response))
         Notify.create({
-          message: '请设置属性：' + request.attribute
+          message: '读取前请设置属性：' + request.attribute
         })
       }
     })
     this.client.subscribe(operationTopic + 'set.' + deviceId, (msg) => {
-      console.log('set request')
+      let request = JSON.parse(msg.body)
+      let topic = resultTopic + 'set.' + deviceId + '.' + request.requestId
+      let value = toDataValue(request)
+      store.commit('setAttribute', value)
+      let response = { 'success': true }
+      this.client.send(topic, {}, JSON.stringify(response))
     })
     this.client.subscribe(operationTopic + 'action.' + deviceId, (msg) => {
       console.log('action request')

@@ -12,7 +12,7 @@
           <q-list highlight separator>
             <q-item v-for="(actionKey) in Object.keys(actionTypes)" :key="actionKey" >
               <q-item-section avatar v-if="$q.screen.gt.xs">
-                <q-icon color="primary" name="location_city" />
+                <q-icon color="primary" name="call_to_action" />
               </q-item-section>
               <q-item-section @click="goto(siteType.id)" class="cursor-pointer">
                 <q-item-label >{{actionKey}}</q-item-label>

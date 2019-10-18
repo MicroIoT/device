@@ -18,12 +18,15 @@ const localStoragePlugin = store => {
       if (type === 'server' || type === 'quit') {
         window.localStorage.setItem(keys.SERVER_STATE, JSON.stringify(state.user.server))
       }
-      if (type === 'token') {
+      if (type === 'token' || type === 'quit') {
         window.localStorage.setItem(keys.TOKEN_STATE, JSON.stringify(state.user.token))
       }
       if (type === 'login' || type === 'logout') {
         window.localStorage.setItem(keys.LOGIN_STATE, JSON.stringify(state.user.logined))
         window.localStorage.setItem(keys.USER_STATE, JSON.stringify(state.user.user))
+      }
+      if (type === 'setAttribute') {
+        window.localStorage.setItem(JSON.parse(localStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ATTRIBUTE_STATE, JSON.stringify(state.attribute.attribute))
       }
     } catch (e) {
       Notify.create({

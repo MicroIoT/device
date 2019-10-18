@@ -1,4 +1,4 @@
-// import store from '../store'
+import store from '../store'
 import { stomp } from './stomp'
 
 export function getTypeInfo (dataType) {
@@ -47,5 +47,115 @@ export function formatDate (date, simple) {
 }
 export function initSystem () {
   stomp.connect()
-  // store.commit('initAttribute')
+  store.commit('initAttribute')
+}
+export function toDataInfo (info) {
+  let value = info.value
+  let type = info.type
+  let result
+  if (type === 'Struct') {
+    result = { 'structValue': getStruct(value) }
+  } else if (type === 'Array') {
+    result = { 'arrayValue': getArray(value) }
+  } else {
+    result = { 'value': value }
+  }
+  return result
+}
+function getStruct (value) {
+  let result = {}
+  for (var key in value) {
+    let info = value[key]
+    let type = info.type
+    let v = info.value
+    if (type === 'Struct' || type === 'Choice') {
+      result[key] = { 'structValue': getStruct(v) }
+    } else if (type === 'Array') {
+      result[key] = { 'arrayValue': getArray(v) }
+    } else {
+      result[key] = { 'value': v }
+    }
+  }
+  return result
+}
+function getArray (value) {
+  let arrayResult = []
+  let result
+  value.forEach((item, index, array) => {
+    let type = item.type
+    let v = item.value
+    if (type === 'Struct' || type === 'Choice') {
+      result = { 'structValue': getStruct(v) }
+    } else if (type === 'Array') {
+      result = { 'arrayValue': getArray(v) }
+    } else {
+      result = { 'value': v }
+    }
+    arrayResult.push(result)
+  })
+  return arrayResult
+}
+export function toDataValue (info) {
+  let name = info.attribute
+  let infoValue = info.value
+  let dataValue = {}
+  let result
+  let string
+  for (var key in infoValue) {
+    if (key === 'structValue') {
+      result = convertStruct(infoValue[key])
+      string = null
+    } else if (key === 'arrayValue') {
+      result = convertArray(infoValue[key])
+      string = null
+    } else if (key === 'value') {
+      result = infoValue[key]
+      string = result
+    }
+    dataValue[name] = { 'value': result, 'string': string }
+  }
+  return dataValue
+}
+function convertStruct (value) {
+  let result
+  let string
+  let structResult = {}
+  for (var key in value) {
+    let info = value[key]
+    let type = Object.keys(info)[0]
+    let v = info[Object.keys(info)[0]]
+    if (type === 'structValue') {
+      result = convertStruct(v)
+      string = null
+    } else if (type === 'arrayValue') {
+      result = convertArray(v)
+      string = null
+    } else if (type === 'value') {
+      result = v
+      string = v
+    }
+    structResult[key] = { 'value': result, 'string': string }
+  }
+  return structResult
+}
+function convertArray (value) {
+  let arrayResult = []
+  let result
+  let string
+  value.forEach((item, index, array) => {
+    let type = Object.keys(item)[0]
+    let v = item[Object.keys(item)[0]]
+    if (type === 'structValue') {
+      result = convertStruct(v)
+      string = null
+    } else if (type === 'arrayValue') {
+      result = convertArray(v)
+      string = null
+    } else if (type === 'value') {
+      result = v
+      string = v
+    }
+    arrayResult.push({ 'value': result, 'string': string })
+  })
+  return arrayResult
 }
