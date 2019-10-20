@@ -25,8 +25,6 @@
           <q-card>
             <AttributeDefinition title="设备静态属性" :attributeDefinition="devicetype.staticAttDefinition"/>
             <AttributeDefinition title="设备动态属性" :attributeDefinition="devicetype.attDefinition"/>
-            <AttributeDefinition title="设备告警类型" :attributeDefinition="devicetype.alarmTypes"/>
-
             <q-expansion-item
               class="q-ma-md"
               switch-toggle-side
@@ -50,6 +48,7 @@
                 </q-tab-panel>
               </q-tab-panels>
             </q-expansion-item>
+            <AttributeDefinition title="设备告警类型" :attributeDefinition="devicetype.alarmTypes"/>
           </q-card>
 
         </q-card-section>

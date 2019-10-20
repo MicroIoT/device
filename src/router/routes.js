@@ -40,6 +40,10 @@ const routes = [
       { path: 'alarms',
         name: 'alarms',
         component: () => import('pages/Alarms.vue')
+      },
+      { path: 'alarms/alarm/:name',
+        name: 'alarm',
+        component: () => import('pages/Alarm.vue')
       }
     ]
   }

@@ -27,6 +27,9 @@ const localStoragePlugin = store => {
       if (type === 'setAttribute') {
         window.localStorage.setItem(JSON.parse(localStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ATTRIBUTE_STATE, JSON.stringify(state.attribute.attribute))
       }
+      if (type === 'setAlarm') {
+        window.localStorage.setItem(JSON.parse(localStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ALARM_STATE, JSON.stringify(state.alarm.alarm))
+      }
       if (type === 'setActionResponse' || type === 'setActionRequest') {
         window.localStorage.setItem(JSON.parse(localStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ACTION_STATE, JSON.stringify(state.action.action))
       }

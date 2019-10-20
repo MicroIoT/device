@@ -49,6 +49,7 @@ export function initSystem () {
   stomp.connect()
   store.commit('initAttribute')
   store.commit('initAction')
+  store.commit('initAlarm')
 }
 export function toDataInfo (info) {
   let value = info.value

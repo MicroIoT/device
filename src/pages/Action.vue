@@ -27,6 +27,7 @@
           </q-list>
           <q-card class="q-my-md">
             <q-expansion-item
+              ref="request"
               class="q-ma-md"
               switch-toggle-side
               header-class="text-primary"
@@ -93,6 +94,7 @@ export default {
     clickEdit () {
       if (!this.edit) {
         this.$refs.response.show()
+        this.$refs.request.hide()
         this.edit = true
       } else {
         if (this.$refs.responseInput.canSubmit()) {
