@@ -51,26 +51,56 @@ class StompClient {
         response.value = value
         response.success = true
         this.client.send(topic, {}, JSON.stringify(response))
+        Notify.create({
+          message: request.requester.username + '读取属性：' + request.attribute,
+          color: 'positive'
+        })
       } else {
         let response = {}
         response.success = false
         response.error = 'attribute not set'
         this.client.send(topic, {}, JSON.stringify(response))
         Notify.create({
-          message: '读取前请设置属性：' + request.attribute
+          message: '读取属性前请设置属性：' + request.attribute
         })
       }
     })
     this.client.subscribe(operationTopic + 'set.' + deviceId, (msg) => {
       let request = JSON.parse(msg.body)
       let topic = resultTopic + 'set.' + deviceId + '.' + request.requestId
-      let value = toDataValue(request)
+      let value = toDataValue(request.attribute, request.value)
       store.commit('setAttribute', value)
       let response = { 'success': true }
       this.client.send(topic, {}, JSON.stringify(response))
+      Notify.create({
+        message: request.requester.username + '设置属性：' + request.attribute,
+        color: 'positive'
+      })
     })
     this.client.subscribe(operationTopic + 'action.' + deviceId, (msg) => {
-      console.log('action request')
+      let request = JSON.parse(msg.body)
+      let resp = store.getters.getActionResponse(request.action)
+      let topic = resultTopic + 'action.' + deviceId + '.' + request.requestId
+      if (resp) {
+        let value = toDataValue(request.action, request.value)
+        store.commit('setActionRequest', value)
+        let response = {}
+        response.value = resp
+        response.success = true
+        this.client.send(topic, {}, JSON.stringify(response))
+        Notify.create({
+          message: request.requester.username + '执行操作：' + request.action,
+          color: 'positive'
+        })
+      } else {
+        let response = {}
+        response.success = false
+        response.error = 'action response not set'
+        this.client.send(topic, {}, JSON.stringify(response))
+        Notify.create({
+          message: '执行操作前请设置操作的响应：' + request.action
+        })
+      }
     })
   }
 

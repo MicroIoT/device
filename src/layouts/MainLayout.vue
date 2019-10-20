@@ -84,15 +84,6 @@
               <q-item-label>告警</q-item-label>
             </q-item-section>
           </q-item>
-          <q-separator spaced inset/>
-          <q-item clickable v-ripple to="/home/logs">
-            <q-item-section avatar>
-              <q-icon name="assignment"/>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>日志</q-item-label>
-            </q-item-section>
-          </q-item>
         </q-list>
       </q-scroll-area>
     </q-drawer>

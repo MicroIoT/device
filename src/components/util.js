@@ -48,6 +48,7 @@ export function formatDate (date, simple) {
 export function initSystem () {
   stomp.connect()
   store.commit('initAttribute')
+  store.commit('initAction')
 }
 export function toDataInfo (info) {
   let value = info.value
@@ -95,25 +96,22 @@ function getArray (value) {
   })
   return arrayResult
 }
-export function toDataValue (info) {
-  let name = info.attribute
-  let infoValue = info.value
+export function toDataValue (name, infoValue) {
   let dataValue = {}
   let result
   let string
-  for (var key in infoValue) {
-    if (key === 'structValue') {
-      result = convertStruct(infoValue[key])
-      string = null
-    } else if (key === 'arrayValue') {
-      result = convertArray(infoValue[key])
-      string = null
-    } else if (key === 'value') {
-      result = infoValue[key]
-      string = result
-    }
-    dataValue[name] = { 'value': result, 'string': string }
+  let key = Object.keys(infoValue)[0]
+  if (key === 'structValue') {
+    result = convertStruct(infoValue[key])
+    string = null
+  } else if (key === 'arrayValue') {
+    result = convertArray(infoValue[key])
+    string = null
+  } else if (key === 'value') {
+    result = infoValue[key]
+    string = result
   }
+  dataValue[name] = { 'value': result, 'string': string }
   return dataValue
 }
 function convertStruct (value) {

@@ -14,11 +14,11 @@
               <q-item-section avatar v-if="$q.screen.gt.xs">
                 <q-icon color="primary" name="call_to_action" />
               </q-item-section>
-              <q-item-section @click="goto(siteType.id)" class="cursor-pointer">
+              <q-item-section @click="goto(actionKey)" class="cursor-pointer">
                 <q-item-label >{{actionKey}}</q-item-label>
                 <q-item-label caption>{{actionTypes[actionKey].description}}</q-item-label>
               </q-item-section>
-              <q-item-section side @click="goto(siteType.id)">
+              <q-item-section side @click="goto(actionKey)">
                 <q-btn color="secondary" size="12px" flat dense round icon="info" >
                   <q-tooltip>详情</q-tooltip>
                 </q-btn>
@@ -45,6 +45,13 @@ export default {
     }
   },
   methods: {
+    goto (name) {
+      var page = {
+        name: 'action',
+        params: { name: name }
+      }
+      this.$router.push(page)
+    }
   }
 }
 </script>

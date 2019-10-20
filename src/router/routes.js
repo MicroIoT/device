@@ -33,13 +33,13 @@ const routes = [
         name: 'actions',
         component: () => import('pages/Actions.vue')
       },
+      { path: 'actions/action/:name',
+        name: 'action',
+        component: () => import('pages/Action.vue')
+      },
       { path: 'alarms',
         name: 'alarms',
         component: () => import('pages/Alarms.vue')
-      },
-      { path: 'logs',
-        name: 'logs',
-        component: () => import('pages/Logs.vue')
       }
     ]
   }
