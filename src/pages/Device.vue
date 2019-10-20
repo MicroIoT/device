@@ -24,7 +24,7 @@
               <template v-slot:prepend>
                 <q-icon name="event" color="primary"/>
               </template>
-              <template v-slot:control  @click="gotoDeviceType(device.deviceType.id)">
+              <template v-slot:control  @click="gotoDeviceType()">
                 <div class="self-center full-width no-outline" tabindex="0">{{$store.getters.getCurrentUser.deviceType.name}}</div>
               </template>
               <template v-slot:append>
@@ -87,7 +87,7 @@ export default {
         this.$router.push({ path: '/home/sites/' + site.id })
       }
     },
-    gotoDeviceType (devicetypeId) {
+    gotoDeviceType () {
       var page = {
         name: 'devicetype'
       }

@@ -18,10 +18,15 @@
                 <q-item-label >{{actionKey}}</q-item-label>
                 <q-item-label caption>{{actionTypes[actionKey].description}}</q-item-label>
               </q-item-section>
-              <q-item-section side @click="goto(actionKey)">
-                <q-btn color="secondary" size="12px" flat dense round icon="info" >
-                  <q-tooltip>详情</q-tooltip>
-                </q-btn>
+              <q-item-section side >
+                <div class="text-grey-8 q-gutter-xs">
+                  <q-btn color="secondary" size="12px" flat dense round icon="info" @click="goto(actionKey)">
+                    <q-tooltip>详情</q-tooltip>
+                  </q-btn>
+                  <q-btn color="secondary" size="12px" flat dense round icon="more" @click="gotoDeviceType">
+                    <q-tooltip>定义</q-tooltip>
+                  </q-btn>
+                </div>
               </q-item-section>
             </q-item>
           </q-list>
@@ -49,6 +54,12 @@ export default {
       var page = {
         name: 'action',
         params: { name: name }
+      }
+      this.$router.push(page)
+    },
+    gotoDeviceType () {
+      var page = {
+        name: 'devicetype'
       }
       this.$router.push(page)
     }

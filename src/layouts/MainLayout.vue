@@ -18,9 +18,9 @@
           </q-toolbar-title>
         </q-btn>
         <q-space />
-        <div class="q-gutter-sm row items-center no-wrap">
+        <div class="q-gutter-sm row items-center">
           <q-btn round flat icon="person">
-            <q-menu >
+            <q-menu fit>
               <q-list separator>
                 <q-item clickable v-close-popup to="/home/device">
                   <q-item-section avatar>
