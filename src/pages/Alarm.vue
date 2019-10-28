@@ -108,7 +108,6 @@ export default {
             'alarmType': this.name,
             'reportTime': formattedString
           }
-          console.log(info)
           http('post', '/alarms', info, (response) => {
             this.$q.dialog({
               title: '上报成功',

@@ -19,18 +19,17 @@ const mutations = {
     let alarmKey = username + '.' + keys.ALARM_STATE
     let alarm = window.localStorage.getItem(alarmKey)
     if (alarm === null) {
-      state.alarm = {}
+      Vue.set(state, 'alarm', {})
     } else {
-      state.alarm = JSON.parse(alarm)
+      Vue.set(state, 'alarm', JSON.parse(alarm))
     }
   },
   setAlarm (state, value) {
     let k = Object.keys(value)[0]
     let v = value[k]
     if (state.alarm === null) {
-      state.alarm = {}
+      Vue.set(state, 'alarm', {})
     }
-    state.alarm[k] = v
     Vue.set(state.alarm, k, v)
   }
 }

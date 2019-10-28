@@ -24,8 +24,8 @@
               <template v-slot:prepend>
                 <q-icon name="event" color="primary"/>
               </template>
-              <template v-slot:control  @click="gotoDeviceType()">
-                <div class="self-center full-width no-outline" tabindex="0">{{$store.getters.getCurrentUser.deviceType.name}}</div>
+              <template v-slot:control  >
+                <div @click="gotoDeviceType()" class="self-center full-width no-outline" tabindex="0">{{$store.getters.getCurrentUser.deviceType.name}}</div>
               </template>
               <template v-slot:append>
                 <q-btn color="secondary" size="12px" flat dense round icon="info" @click="gotoDeviceType(device.deviceType.id)">
@@ -42,6 +42,37 @@
           </q-field>
 
             <AttributeValue title="设备静态属性" :attributeValue="device.attributes" v-if="device.attributes && Object.keys(device.attributes).length > 0"/>
+            <q-expansion-item
+              class="q-ma-md"
+              switch-toggle-side
+              expand-separator
+              header-class="text-primary"
+              label="我的设备组"
+              v-if="deviceGroups && deviceGroups.length > 0">
+              <q-list separator>
+                  <q-expansion-item
+                    class="q-ma-md"
+                    switch-toggle-side
+                    expand-separator
+                    header-class="text-primary"
+                    :label="deviceGroup.name"
+                    v-for="deviceGroup in deviceGroups" :key="deviceGroup.id">
+                    <q-card class="q-ma-md">
+                      <q-list separator>
+                        <q-item v-for="device in deviceGroup.devices" :key="device.id">
+                          <q-item-section avatar v-if="$q.screen.gt.xs">
+                            <q-icon color="primary" :name="device.connected?'devices':'phonelink_off'" />
+                          </q-item-section>
+                          <q-item-section @click="gotoDevice(device.id)" class="cursor-pointer">
+                            <q-item-label>{{device.name}}</q-item-label>
+                            <q-item-label caption>{{device.deviceType.name}}</q-item-label>
+                          </q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-card>
+                  </q-expansion-item>
+              </q-list>
+            </q-expansion-item>
           </q-card>
         </q-card-section>
       </q-card>
@@ -51,6 +82,7 @@
 
 <script>
 import AttributeValue from '../components/AttributeValue'
+import { http } from '../components/http'
 
 export default {
   components: {
@@ -69,7 +101,8 @@ export default {
         },
         deviceAccount: {
         }
-      }
+      },
+      deviceGroups: ''
     }
   },
   computed: {
@@ -79,7 +112,15 @@ export default {
       return device.domain.name + ':' + location
     }
   },
+  created: function () {
+    this.getDeviceGroup()
+  },
   methods: {
+    getDeviceGroup () {
+      http('get', '/devicegroups/me', null, (response) => {
+        this.deviceGroups = response.data
+      })
+    },
     gotoSite (site) {
       if (site.type === 'domain') {
         this.$router.push({ path: '/home/sites/root' })

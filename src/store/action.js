@@ -31,16 +31,16 @@ const mutations = {
     let actionKey = username + '.' + keys.ACTION_STATE
     let action = window.localStorage.getItem(actionKey)
     if (action === null) {
-      state.action = {}
+      Vue.set(state, 'action', {})
     } else {
-      state.action = JSON.parse(action)
+      Vue.set(state, 'action', JSON.parse(action))
     }
   },
   setActionResponse (state, value) {
     let action = Object.keys(value)[0]
     let response = value[action]
     if (state.action === null) {
-      state.action = {}
+      Vue.set(state, 'action', {})
     }
     let key = action + '.response'
     Vue.set(state.action, key, response)
@@ -49,7 +49,7 @@ const mutations = {
     let action = Object.keys(value)[0]
     let request = value[action]
     if (state.action === null) {
-      state.action = {}
+      Vue.set(state, 'action', {})
     }
     let key = action + '.request'
     Vue.set(state.action, key, request)
