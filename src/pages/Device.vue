@@ -28,7 +28,7 @@
                 <div @click="gotoDeviceType()" class="self-center full-width no-outline" tabindex="0">{{$store.getters.getCurrentUser.deviceType.name}}</div>
               </template>
               <template v-slot:append>
-                <q-btn color="secondary" size="12px" flat dense round icon="info" @click="gotoDeviceType(device.deviceType.id)">
+                <q-btn color="secondary" size="12px" flat dense round icon="info" @click="gotoDeviceType()">
                 </q-btn>
               </template>
           </q-field>
@@ -36,12 +36,12 @@
             <template v-slot:prepend>
               <q-icon name="event" color="primary"/>
             </template>
-            <template v-slot:control  @click="gotoSite(device.location)">
+            <template v-slot:control  >
               <div class="self-center full-width no-outline" tabindex="0">{{getLocation}}</div>
             </template>
           </q-field>
 
-            <AttributeValue title="设备静态属性" :attributeValue="device.attributes" v-if="device.attributes && Object.keys(device.attributes).length > 0"/>
+            <AttributeValue title="设备静态属性" :attributeValue="$store.getters.getCurrentUser.attributes" v-if="$store.getters.getCurrentUser.attributes && Object.keys($store.getters.getCurrentUser.attributes).length > 0"/>
             <q-expansion-item
               class="q-ma-md"
               switch-toggle-side
@@ -91,17 +91,6 @@ export default {
   name: 'device',
   data () {
     return {
-      myDevice: false,
-      selectedParam: '',
-      deviceId: '',
-      device: {
-        site: [],
-        deviceType: {
-          actionTypes: {}
-        },
-        deviceAccount: {
-        }
-      },
       deviceGroups: ''
     }
   },
@@ -120,13 +109,6 @@ export default {
       http('get', '/devicegroups/me', null, (response) => {
         this.deviceGroups = response.data
       })
-    },
-    gotoSite (site) {
-      if (site.type === 'domain') {
-        this.$router.push({ path: '/home/sites/root' })
-      } else {
-        this.$router.push({ path: '/home/sites/' + site.id })
-      }
     },
     gotoDeviceType () {
       var page = {
