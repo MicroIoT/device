@@ -1,6 +1,5 @@
 <template>
-  <q-layout > <!-- Be sure to play with the Layout demo on docs -->
-
+  <q-layout >
     <q-page-container>
       <q-page padding class="column justify-center items-center" >
         <q-card inline style="width: 400px;">

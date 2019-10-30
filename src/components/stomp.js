@@ -108,8 +108,10 @@ class StompClient {
     this.subscriptions.forEach(subscription => {
       subscription.unsubscribe()
     })
-    this.client.disconnect(() => {
-    })
+    if (this.ws.readyState === WebSocket.OPEN) {
+      this.client.disconnect(() => {
+      })
+    }
     // this.ws.close()
   }
 }
