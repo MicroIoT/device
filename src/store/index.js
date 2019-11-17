@@ -15,23 +15,23 @@ const localStoragePlugin = store => {
     let type = mutation.type
     try {
       if (type === 'server' || type === 'quit') {
-        window.localStorage.setItem(keys.SERVER_STATE, JSON.stringify(state.user.server))
+        window.sessionStorage.setItem(keys.SERVER_STATE, JSON.stringify(state.user.server))
       }
       if (type === 'token' || type === 'quit') {
-        window.localStorage.setItem(keys.TOKEN_STATE, JSON.stringify(state.user.token))
+        window.sessionStorage.setItem(keys.TOKEN_STATE, JSON.stringify(state.user.token))
       }
       if (type === 'login' || type === 'logout') {
-        window.localStorage.setItem(keys.LOGIN_STATE, JSON.stringify(state.user.logined))
-        window.localStorage.setItem(keys.USER_STATE, JSON.stringify(state.user.user))
+        window.sessionStorage.setItem(keys.LOGIN_STATE, JSON.stringify(state.user.logined))
+        window.sessionStorage.setItem(keys.USER_STATE, JSON.stringify(state.user.user))
       }
       if (type === 'setAttribute') {
-        window.localStorage.setItem(JSON.parse(localStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ATTRIBUTE_STATE, JSON.stringify(state.attribute.attribute))
+        window.localStorage.setItem(JSON.parse(sessionStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ATTRIBUTE_STATE, JSON.stringify(state.attribute.attribute))
       }
       if (type === 'setAlarm') {
-        window.localStorage.setItem(JSON.parse(localStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ALARM_STATE, JSON.stringify(state.alarm.alarm))
+        window.localStorage.setItem(JSON.parse(sessionStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ALARM_STATE, JSON.stringify(state.alarm.alarm))
       }
       if (type === 'setActionResponse' || type === 'setActionRequest') {
-        window.localStorage.setItem(JSON.parse(localStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ACTION_STATE, JSON.stringify(state.action.action))
+        window.localStorage.setItem(JSON.parse(sessionStorage.getItem(keys.USER_STATE)).deviceAccount.username + '.' + keys.ACTION_STATE, JSON.stringify(state.action.action))
       }
     } catch (e) {
       Notify.create({

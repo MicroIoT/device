@@ -1,10 +1,10 @@
 import * as keys from './keys'
 
 const state = {
-  server: JSON.parse(window.localStorage.getItem(keys.SERVER_STATE)),
-  token: JSON.parse(window.localStorage.getItem(keys.TOKEN_STATE)),
-  logined: JSON.parse(window.localStorage.getItem(keys.LOGIN_STATE) || false),
-  user: JSON.parse(window.localStorage.getItem(keys.USER_STATE))
+  server: JSON.parse(window.sessionStorage.getItem(keys.SERVER_STATE)),
+  token: JSON.parse(window.sessionStorage.getItem(keys.TOKEN_STATE)),
+  logined: JSON.parse(window.sessionStorage.getItem(keys.LOGIN_STATE) || false),
+  user: JSON.parse(window.sessionStorage.getItem(keys.USER_STATE))
 }
 
 const getters = {
