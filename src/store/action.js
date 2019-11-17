@@ -27,7 +27,7 @@ const getters = {
 
 const mutations = {
   initAction (state) {
-    let username = JSON.parse(localStorage.getItem(keys.USER_STATE)).deviceAccount.username
+    let username = JSON.parse(sessionStorage.getItem(keys.USER_STATE)).deviceAccount.username
     let actionKey = username + '.' + keys.ACTION_STATE
     let action = window.localStorage.getItem(actionKey)
     if (action === null) {

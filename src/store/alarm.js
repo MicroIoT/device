@@ -15,7 +15,7 @@ const getters = {
 
 const mutations = {
   initAlarm (state) {
-    let username = JSON.parse(localStorage.getItem(keys.USER_STATE)).deviceAccount.username
+    let username = JSON.parse(sessionStorage.getItem(keys.USER_STATE)).deviceAccount.username
     let alarmKey = username + '.' + keys.ALARM_STATE
     let alarm = window.localStorage.getItem(alarmKey)
     if (alarm === null) {
