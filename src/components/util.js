@@ -55,7 +55,7 @@ export function toDataInfo (info) {
   let value = info.value
   let type = info.type
   let result
-  if (type === 'Struct') {
+  if (type === 'Struct' || type === 'Choice') {
     result = { 'structValue': getStruct(value) }
   } else if (type === 'Array') {
     result = { 'arrayValue': getArray(value) }

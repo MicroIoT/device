@@ -52,14 +52,14 @@
         <q-field v-else-if="value.dataType.type === 'Location' "
                  :hint="getHint(value)"
         >
-          <q-input class="self-center full-width no-outline" prefix="经度： " v-model="value.longitude" @change="check(key, value)" autofocus :readonly="!edit"/>
+          <q-input class="self-center full-width no-outline" prefix="经度： " v-model="value.longitude" autofocus :readonly="!edit"/>
           <q-input class="self-center full-width no-outline" prefix="纬度： " v-model="value.lantitude" @change="check(key, value)" :readonly="!edit" />
         </q-field>
         <AttributeInput :attDefinition="getStructInfo(value.dataType.attTypes)" v-else-if="value.dataType.type === 'Struct'" type="Struct" :ref="key" :indexName="getIndexName(key)" :edit="edit"/>
         <AttributeInput :attDefinition="getArrayInfo(value.dataType, value.optional)" v-else-if="value.dataType.type === 'Array'"  type="Array" :ref="key" :indexName="getIndexName(key)" :edit="edit"/>
-        <AttributeInput :attDefinition="getChoiceInfo(value.dataType.attTypes, choice)" v-else  type="Choice" :ref="key" :indexName="getIndexName(key)" :edit="edit"/>
+        <AttributeInput :attDefinition="getChoiceInfo(value.dataType.attTypes, value.selected)" v-else  type="Choice" :ref="key" :indexName="getIndexName(key)" :edit="edit"/>
         <q-stepper-navigation content>
-          <q-select label="选择" v-if="value.dataType.type === 'Choice'" :readonly="!edit" :options="getChoice(value.dataType.attTypes)" @input="($value) => { setChoiceValue($value, value) }" :value="getChoiceValue(choice, value.dataType.attTypes)"></q-select>
+          <q-select label="选择" v-if="value.dataType.type === 'Choice'" :readonly="!edit" :options="getChoice(value.dataType.attTypes)" v-model="value.selected"></q-select>
           <div class="q-gutter-xs q-my-xs">
             <q-btn color="primary" label="继续" @click="clickCheck(key, value, true)" v-if="showDownward(index)"></q-btn>
             <q-btn color="primary" label="回退" @click="clickCheck(key, value, false)" v-if="showUpward(index)"></q-btn>
@@ -93,6 +93,14 @@ export default {
       if (this.type === 'Array') {
         return this.$store.getters.arrayDefinition(this.indexName)
       } else {
+        for (var key in this.attDefinition) {
+          if (this.attDefinition[key].dataType.type === 'Choice') {
+            if (this.attDefinition[key].selected === undefined) {
+              let selected = Object.keys(this.attDefinition[key].dataType.attTypes)[0]
+              this.$set(this.attDefinition[key], 'selected', selected)
+            }
+          }
+        }
         return this.attDefinition
       }
     },
@@ -201,7 +209,13 @@ export default {
       for (var key in this.getDefinition()) {
         var value = this.getDefinition()[key]
         this.isValid(key, value)
-        result[key] = value.input
+        if (value.dataType.type === 'Choice') {
+          let choice = {}
+          choice[value.selected] = value.input[value.selected]
+          result[key] = choice
+        } else {
+          result[key] = value.input
+        }
       }
       this.step = 0
       return this.convert(result, info)
@@ -454,7 +468,7 @@ export default {
     },
     getTitle (key, value) {
       let description
-      if (value.description !== undefined) {
+      if (value.description !== undefined && value.description !== null) {
         description = value.description
       } else {
         description = ''
@@ -486,15 +500,6 @@ export default {
       let info = {}
       info[key] = attTypes[key]
       return info
-    },
-    getChoiceValue (choice, value) {
-      let c = choice === '' ? Object.keys(value)[0] : choice
-      this.choice = c
-      return c
-    },
-    setChoiceValue (value, v) {
-      v.input = {}
-      this.choice = value
     }
   }
 }
