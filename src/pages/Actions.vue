@@ -7,9 +7,9 @@
           操作
         </q-toolbar-title>
       </q-toolbar>
-      <q-card class="q-ma-md">
+      <q-card class="q-ma-md" v-if="actionTypes !== null">
         <q-card-section>
-          <q-list highlight separator>
+          <q-list highlight separator >
             <q-item v-for="(actionKey) in Object.keys(actionTypes)" :key="actionKey" >
               <q-item-section avatar v-if="$q.screen.gt.xs">
                 <q-icon color="primary" name="call_to_action" />

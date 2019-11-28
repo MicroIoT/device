@@ -7,7 +7,7 @@
           属性
         </q-toolbar-title>
       </q-toolbar>
-      <q-card class="q-ma-md">
+      <q-card class="q-ma-md" v-if="attDefinition !== null">
         <q-card-section>
           <q-list highlight separator>
             <q-item v-for="(attKey) in Object.keys(attDefinition)" :key="attKey" >

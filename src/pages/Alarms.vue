@@ -7,9 +7,9 @@
           告警
         </q-toolbar-title>
       </q-toolbar>
-      <q-card class="q-ma-md">
+      <q-card class="q-ma-md" v-if="alarmTypes !== null">
         <q-card-section>
-          <q-list highlight separator>
+          <q-list highlight separator >
             <q-item v-for="(alarmKey) in Object.keys(alarmTypes)" :key="alarmKey" >
               <q-item-section avatar v-if="$q.screen.gt.xs">
                 <q-icon color="primary" name="notification_important" />
