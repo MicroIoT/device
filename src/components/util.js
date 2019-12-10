@@ -97,25 +97,25 @@ function getArray (value) {
   })
   return arrayResult
 }
-export function toDataValue (name, infoValue) {
+export function toDataValue (name, infoValue, dataType) {
   let dataValue = {}
   let result
   let string
   let key = Object.keys(infoValue)[0]
   if (key === 'structValue') {
-    result = convertStruct(infoValue[key])
+    result = convertStruct(infoValue[key], dataType.attTypes)
     string = null
   } else if (key === 'arrayValue') {
-    result = convertArray(infoValue[key])
+    result = convertArray(infoValue[key], dataType.dataType)
     string = null
   } else if (key === 'value') {
     result = infoValue[key]
     string = result
   }
-  dataValue[name] = { 'value': result, 'string': string }
+  dataValue[name] = { 'type': dataType.type, 'value': result, 'string': string }
   return dataValue
 }
-function convertStruct (value) {
+function convertStruct (value, attTypes) {
   let result
   let string
   let structResult = {}
@@ -124,20 +124,20 @@ function convertStruct (value) {
     let type = Object.keys(info)[0]
     let v = info[Object.keys(info)[0]]
     if (type === 'structValue') {
-      result = convertStruct(v)
+      result = convertStruct(v, attTypes[key].dataType.attTypes)
       string = null
     } else if (type === 'arrayValue') {
-      result = convertArray(v)
+      result = convertArray(v, attTypes[key].dataType.dataType)
       string = null
     } else if (type === 'value') {
       result = v
       string = v
     }
-    structResult[key] = { 'value': result, 'string': string }
+    structResult[key] = { 'type': attTypes[key].dataType.type, 'value': result, 'string': string }
   }
   return structResult
 }
-function convertArray (value) {
+function convertArray (value, dataType) {
   let arrayResult = []
   let result
   let string
@@ -145,16 +145,16 @@ function convertArray (value) {
     let type = Object.keys(item)[0]
     let v = item[Object.keys(item)[0]]
     if (type === 'structValue') {
-      result = convertStruct(v)
+      result = convertStruct(v, dataType.attTypes)
       string = null
     } else if (type === 'arrayValue') {
-      result = convertArray(v)
+      result = convertArray(v, dataType.dataType)
       string = null
     } else if (type === 'value') {
       result = v
       string = v
     }
-    arrayResult.push({ 'value': result, 'string': string })
+    arrayResult.push({ 'type': dataType.type, 'value': result, 'string': string })
   })
   return arrayResult
 }

@@ -67,7 +67,8 @@ class StompClient {
     this.client.subscribe(operationTopic + 'set.' + deviceId, (msg) => {
       let request = JSON.parse(msg.body)
       let topic = resultTopic + 'set.' + deviceId + '.' + request.requestId
-      let value = toDataValue(request.attribute, request.value)
+      let type = store.getters.getCurrentUser.deviceType.attDefinition[request.attribute].dataType
+      let value = toDataValue(request.attribute, request.value, type)
       store.commit('setAttribute', value)
       let response = { 'success': true }
       this.client.send(topic, {}, JSON.stringify(response))
