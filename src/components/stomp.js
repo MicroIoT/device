@@ -108,8 +108,10 @@ class StompClient {
     this.subscriptions.forEach(subscription => {
       subscription.unsubscribe()
     })
-    this.client.disconnect(() => {
-    })
+    if (typeof this.client.disconnect === 'function') {
+      this.client.disconnect(() => {
+      })
+    }
   }
 }
 

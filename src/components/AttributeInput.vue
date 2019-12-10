@@ -323,11 +323,23 @@ export default {
       if (info) {
         return { value: value }
       } else {
-        let v = value
-        return {
-          type: definition.type,
-          value: v,
-          string: v.toString()
+        if (definition.type === 'Location') {
+          let longitude = value.split(',')[0]
+          let latitude = value.split(',')[1]
+          let v = '[' + value.toString() + ']'
+          return {
+            type: definition.type,
+            longitude: longitude,
+            latitude: latitude,
+            string: v
+          }
+        } else {
+          let v = value
+          return {
+            type: definition.type,
+            value: v,
+            string: v.toString()
+          }
         }
       }
     },
