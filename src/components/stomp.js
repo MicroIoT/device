@@ -81,8 +81,11 @@ class StompClient {
       let request = JSON.parse(msg.body)
       let resp = store.getters.getActionResponse(request.action)
       let topic = resultTopic + 'action.' + deviceId + '.' + request.requestId
+      let actionType = store.getters.getCurrentUser.deviceType.actionTypes[request.action].request
+      let requestName = Object.keys(actionType)[0]
+      let type = actionType[requestName].dataType
       if (resp) {
-        let value = toDataValue(request.action, request.value)
+        let value = toDataValue(request.action, request.value, type)
         store.commit('setActionRequest', value)
         let response = {}
         response.value = resp
