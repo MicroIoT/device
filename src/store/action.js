@@ -13,7 +13,8 @@ const getters = {
       if (response === null) {
         return null
       } else {
-        return { value: response }
+        let responseName = Object.keys(response)[0]
+        return response[responseName]
       }
     }
   },

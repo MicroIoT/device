@@ -333,6 +333,14 @@ export default {
             latitude: latitude,
             string: v
           }
+        } else if (definition.type === 'DateTime') {
+          let v = value.toString()
+          return {
+            type: definition.type,
+            date: v,
+            format: definition.format,
+            string: v
+          }
         } else {
           let v = value
           return {
