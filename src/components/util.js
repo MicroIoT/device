@@ -54,15 +54,21 @@ export function initSystem () {
 export function toDataInfo (info) {
   let value = info.value
   let type = info.type
+  let string = info.string
   let result
   if (type === 'Struct' || type === 'Choice') {
     result = { 'structValue': getStruct(value) }
   } else if (type === 'Array') {
     result = { 'arrayValue': getArray(value) }
+  } else if (type === 'Location') {
+    result = { 'value': getLocation(info) }
   } else {
-    result = { 'value': value }
+    result = { 'value': string }
   }
   return result
+}
+function getLocation (info) {
+  return info.longitude + ',' + info.latitude
 }
 function getStruct (value) {
   let result = {}
@@ -70,12 +76,15 @@ function getStruct (value) {
     let info = value[key]
     let type = info.type
     let v = info.value
+    let string = info.string
     if (type === 'Struct' || type === 'Choice') {
       result[key] = { 'structValue': getStruct(v) }
     } else if (type === 'Array') {
       result[key] = { 'arrayValue': getArray(v) }
+    } else if (type === 'Location') {
+      result[key] = { 'value': getLocation(info) }
     } else {
-      result[key] = { 'value': v }
+      result[key] = { 'value': string }
     }
   }
   return result
@@ -86,12 +95,15 @@ function getArray (value) {
   value.forEach((item, index, array) => {
     let type = item.type
     let v = item.value
+    let string = item.string
     if (type === 'Struct' || type === 'Choice') {
       result = { 'structValue': getStruct(v) }
     } else if (type === 'Array') {
       result = { 'arrayValue': getArray(v) }
+    } else if (type === 'Location') {
+      result = { 'value': getLocation(item) }
     } else {
-      result = { 'value': v }
+      result = { 'value': string }
     }
     arrayResult.push(result)
   })
