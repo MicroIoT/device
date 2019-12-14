@@ -117,14 +117,29 @@ export function toDataValue (name, infoValue, dataType) {
   if (key === 'structValue') {
     result = convertStruct(infoValue[key], dataType.attTypes)
     string = null
+    dataValue[name] = { 'type': dataType.type, 'value': result, 'string': string }
   } else if (key === 'arrayValue') {
     result = convertArray(infoValue[key], dataType.dataType)
     string = null
+    dataValue[name] = { 'type': dataType.type, 'value': result, 'string': string }
   } else if (key === 'value') {
-    result = infoValue[key]
-    string = result
+    if (dataType.type === 'DateTime') {
+      let date = infoValue[key]
+      string = date
+      let format = dataType.format
+      dataValue[name] = { 'type': dataType.type, 'date': date, 'format': format, 'string': string }
+    } else if (dataType.type === 'Location') {
+      result = infoValue[key]
+      string = '[' + result + ']'
+      let longitude = result.split(',')[0]
+      let latitude = result.split(',')[1]
+      dataValue[name] = { 'type': dataType.type, 'longitude': longitude, 'latitude': latitude, 'string': string }
+    } else {
+      result = infoValue[key]
+      string = result
+      dataValue[name] = { 'type': dataType.type, 'value': result, 'string': string }
+    }
   }
-  dataValue[name] = { 'type': dataType.type, 'value': result, 'string': string }
   return dataValue
 }
 function convertStruct (value, attTypes) {
@@ -138,14 +153,29 @@ function convertStruct (value, attTypes) {
     if (type === 'structValue') {
       result = convertStruct(v, attTypes[key].dataType.attTypes)
       string = null
+      structResult[key] = { 'type': attTypes[key].dataType.type, 'value': result, 'string': string }
     } else if (type === 'arrayValue') {
       result = convertArray(v, attTypes[key].dataType.dataType)
       string = null
+      structResult[key] = { 'type': attTypes[key].dataType.type, 'value': result, 'string': string }
     } else if (type === 'value') {
-      result = v
-      string = v
+      if (attTypes[key].dataType.type === 'DateTime') {
+        let date = v
+        string = date
+        let format = attTypes[key].dataType.format
+        structResult[key] = { 'type': attTypes[key].dataType.type, 'date': date, 'format': format, 'string': string }
+      } else if (attTypes[key].dataType.type === 'Location') {
+        result = v
+        string = '[' + result + ']'
+        let longitude = result.split(',')[0]
+        let latitude = result.split(',')[1]
+        structResult[key] = { 'type': attTypes[key].dataType.type, 'longitude': longitude, 'latitude': latitude, 'string': string }
+      } else {
+        result = v
+        string = v
+        structResult[key] = { 'type': attTypes[key].dataType.type, 'value': result, 'string': string }
+      }
     }
-    structResult[key] = { 'type': attTypes[key].dataType.type, 'value': result, 'string': string }
   }
   return structResult
 }
@@ -159,14 +189,29 @@ function convertArray (value, dataType) {
     if (type === 'structValue') {
       result = convertStruct(v, dataType.attTypes)
       string = null
+      arrayResult.push({ 'type': dataType.type, 'value': result, 'string': string })
     } else if (type === 'arrayValue') {
       result = convertArray(v, dataType.dataType)
       string = null
+      arrayResult.push({ 'type': dataType.type, 'value': result, 'string': string })
     } else if (type === 'value') {
-      result = v
-      string = v
+      if (dataType.type === 'DateTime') {
+        let date = v
+        string = date
+        let format = dataType.format
+        arrayResult.push({ 'type': dataType.type, 'date': date, 'format': format, 'string': string })
+      } else if (dataType.type === 'Location') {
+        result = v
+        string = '[' + result + ']'
+        let longitude = result.split(',')[0]
+        let latitude = result.split(',')[1]
+        arrayResult.push({ 'type': dataType.type, 'longitude': longitude, 'latitude': latitude, 'string': string })
+      } else {
+        result = v
+        string = v
+        arrayResult.push({ 'type': dataType.type, 'value': result, 'string': string })
+      }
     }
-    arrayResult.push({ 'type': dataType.type, 'value': result, 'string': string })
   })
   return arrayResult
 }
