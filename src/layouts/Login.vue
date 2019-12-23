@@ -60,6 +60,10 @@ export default {
       ]
     }
   },
+  created: function () {
+    this.form.username = this.$route.params.username
+    this.form.password = this.$route.params.password
+  },
   validations: {
     form: {
       username: { required },
