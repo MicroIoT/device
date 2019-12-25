@@ -34,7 +34,7 @@ class StompClient {
           this.client.connect(header, () => {
             this.manageSubscription()
           })
-        }, true)
+        }, true, false)
       }
     })
   }
