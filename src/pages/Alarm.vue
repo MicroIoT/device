@@ -109,11 +109,9 @@ export default {
             'reportTime': formattedString
           }
           http('post', '/alarms', info, (response) => {
-            this.$q.dialog({
-              title: '上报成功',
-              ok: {
-                label: '确定'
-              }
+            this.$q.notify({
+              message: this.name + '上报成功',
+              color: 'positive'
             })
           })
         } else {

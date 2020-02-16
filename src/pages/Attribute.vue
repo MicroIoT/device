@@ -17,6 +17,7 @@
               </q-item-section>
               <q-item-section top side>
                 <div class="q-gutter-xs">
+                  <q-btn @click="timerReport" color="primary" v-if="!edit && attDefinition[name].report">{{timer(name) === null ? '定时上报' : '停止定时上报'}}</q-btn>
                   <q-btn @click="report" :flat="edit?true:false" color="primary" v-if="edit || attDefinition[name].report">{{reportText}}</q-btn>
                   <q-btn color="primary" @click="clickEdit" v-if="attDefinition[name].get || attDefinition[name].report">
                     {{editText}}
@@ -67,7 +68,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getAttribute: 'getAttribute'
+      getAttribute: 'getAttribute',
+      timer: 'getTimer'
     }),
     editText () {
       if (!this.edit) {
@@ -83,6 +85,13 @@ export default {
         return '取消'
       }
     },
+    timerText () {
+      if (this.timer(name) === null) {
+        return '定时上报'
+      } else {
+        return '停止定时上报'
+      }
+    },
     attInput () {
       let definition = {}
       definition[this.name] = this.attDefinition[this.name]
@@ -94,34 +103,48 @@ export default {
     }
   },
   methods: {
+    reportEvent () {
+      let v = this.getAttribute(this.name)
+      if (v) {
+        let event = {}
+        let convert = toDataInfo(this.getAttribute(this.name))
+        event[this.name] = convert
+        let timeStamp = Date.now()
+        let formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
+        let info = {
+          'values': event,
+          'reportTime': formattedString
+        }
+        http('post', '/events', info, (response) => {
+          this.$q.notify({
+            message: this.name + '上报成功',
+            color: 'positive'
+          })
+        })
+      } else {
+        this.$q.notify({
+          message: '上报前请设置属性：' + this.name
+        })
+      }
+    },
     report () {
       if (this.edit) {
         this.edit = false
       } else {
-        let v = this.getAttribute(this.name)
-        if (v) {
-          let event = {}
-          let convert = toDataInfo(this.getAttribute(this.name))
-          event[this.name] = convert
-          let timeStamp = Date.now()
-          let formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
-          let info = {
-            'values': event,
-            'reportTime': formattedString
-          }
-          http('post', '/events', info, (response) => {
-            this.$q.dialog({
-              title: '上报成功',
-              ok: {
-                label: '确定'
-              }
-            })
-          })
-        } else {
-          this.$q.notify({
-            message: '上报前请设置属性：' + this.name
-          })
-        }
+        this.reportEvent()
+      }
+    },
+    timerReport () {
+      let value = {}
+      if (this.timer(this.name) === null) {
+        let timer
+        timer = setInterval(() => { this.reportEvent() }, 10000)
+        value[this.name] = timer
+        this.$store.commit('setTimer', value)
+      } else {
+        clearInterval(this.timer(this.name))
+        value[this.name] = null
+        this.$store.commit('setTimer', value)
       }
     },
     clickEdit () {

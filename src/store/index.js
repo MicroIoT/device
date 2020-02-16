@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import user from './user'
+import timer from './timer'
 import attribute from './attribute'
 import arrays from './arrays'
 import action from './action'
@@ -44,6 +45,7 @@ const localStoragePlugin = store => {
 const store = new Vuex.Store({
   modules: {
     user,
+    timer,
     attribute,
     arrays,
     action,
