@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { initSystem } from '../components/util'
 import { stomp } from '../components/stomp'
 
@@ -112,9 +113,15 @@ export default {
     })
   },
   computed: {
+    ...mapGetters({
+      timers: 'getAllTimer'
+    })
   },
   methods: {
     exit () {
+      for (var key of Object.keys(this.timers)) {
+        clearInterval(this.timers[key])
+      }
       stomp.disconnect()
       this.$store.commit('logout')
       this.$store.commit('quit')

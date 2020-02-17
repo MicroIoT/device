@@ -9,6 +9,9 @@ const getters = {
     return (name) => {
       return state.timer[name] ? state.timer[name] : null
     }
+  },
+  getAllTimer: state => {
+    return state.timer
   }
 }
 

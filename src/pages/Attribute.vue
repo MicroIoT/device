@@ -137,10 +137,28 @@ export default {
     timerReport () {
       let value = {}
       if (this.timer(this.name) === null) {
-        let timer
-        timer = setInterval(() => { this.reportEvent() }, 10000)
-        value[this.name] = timer
-        this.$store.commit('setTimer', value)
+        this.$q.dialog({
+          title: '上报周期',
+          message: '请输入定时上报周期（秒）：',
+          prompt: {
+            model: 10,
+            isValid: val => val > 0,
+            type: 'number'
+          },
+          ok: {
+            label: '确定'
+          },
+          cancel: {
+            label: '取消',
+            flat: true
+          },
+          persistent: true
+        }).onOk(data => {
+          let timer = setInterval(() => { this.reportEvent() }, data * 1000)
+          value[this.name] = timer
+          this.$store.commit('setTimer', value)
+        }).onCancel(() => {
+        })
       } else {
         clearInterval(this.timer(this.name))
         value[this.name] = null
