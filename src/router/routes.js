@@ -49,6 +49,35 @@ const routes = [
       { path: 'alarms/alarm/:name',
         name: 'alarm',
         component: () => import('pages/Alarm.vue')
+      },
+      { path: 'devicegroups',
+        name: 'devicegroups',
+        component: () => import('pages/DeviceGroups.vue')
+      },
+      {
+        path: 'devicegroups/devicegroup/:id',
+        name: 'devicegroup',
+        component: () => import('pages/DeviceGroup.vue')
+      },
+      {
+        path: 'devicegroups/mydevice/:id',
+        name: 'mydevice',
+        component: () => import('pages/MyDevice.vue')
+      },
+      {
+        path: 'devicegroups/get/:id/:attribute',
+        name: 'get',
+        component: () => import('pages/Get.vue')
+      },
+      {
+        path: 'devicegroups/set/:id/:attribute',
+        name: 'set',
+        component: () => import('pages/Set.vue')
+      },
+      {
+        path: 'devicegroups/action/:id/:action',
+        name: 'actiondevice',
+        component: () => import('pages/ActionDevice.vue')
       }
     ]
   }

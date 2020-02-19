@@ -1,7 +1,7 @@
 import { Stomp } from '@stomp/stompjs'
 import store from '../store'
 import { http } from './http'
-import { Notify } from 'quasar'
+import { Loading, Notify } from 'quasar'
 import { toDataValue } from './util'
 
 const operationTopic = '/topic/operation.'
@@ -125,6 +125,56 @@ class StompClient {
       this.client.disconnect(() => {
       })
     }
+  }
+  operate (deviceId, operateType, name, input, successCallback, failCallback) {
+    let topic = '/topic/operation.' + operateType + '.' + deviceId
+    let date = new Date()
+    let requestId = date.valueOf()
+    let request
+    request = {
+      requestId: requestId
+    }
+    if (operateType === 'action') {
+      request.action = name
+      request.value = input
+    } else if (operateType === 'set') {
+      request.attribute = name
+      request.value = input[name]
+    } else if (operateType === 'get') {
+      request.attribute = name
+    }
+    Loading.show()
+    let resultTopic = '/topic/result.' + operateType + '.' + deviceId + '.' + requestId
+    let returned = false
+    let subscription = this.client.subscribe(resultTopic, (msg) => {
+      Loading.hide()
+      subscription.unsubscribe()
+      returned = true
+      let result = JSON.parse(msg.body)
+      if (result.success) {
+        if (typeof successCallback === 'function') {
+          successCallback(result)
+        }
+      } else {
+        var error = result.error
+        Notify.create({
+          message: error
+        })
+        if (typeof failCallback === 'function') {
+          failCallback()
+        }
+      }
+    })
+    this.client.send(topic, {}, JSON.stringify(request))
+    setTimeout(() => {
+      if (!returned) {
+        Loading.hide()
+        subscription.unsubscribe()
+        Notify.create({
+          message: '系统无响应！'
+        })
+      }
+    }, 10000)
   }
 }
 

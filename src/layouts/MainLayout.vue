@@ -84,6 +84,15 @@
               <q-item-label>告警</q-item-label>
             </q-item-section>
           </q-item>
+          <q-item clickable v-ripple to="/home/devicegroups">
+            <q-item-section avatar>
+              <q-icon name="group_work" >
+              </q-icon>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>设备组</q-item-label>
+            </q-item-section>
+          </q-item>
         </q-list>
       </q-scroll-area>
     </q-drawer>

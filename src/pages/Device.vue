@@ -42,37 +42,6 @@
           </q-field>
 
             <AttributeValue title="设备静态属性" :attributeValue="$store.getters.getCurrentUser.attributes" v-if="$store.getters.getCurrentUser.attributes && Object.keys($store.getters.getCurrentUser.attributes).length > 0"/>
-            <q-expansion-item
-              class="q-ma-md"
-              switch-toggle-side
-              expand-separator
-              header-class="text-primary"
-              label="我的设备组"
-              v-if="deviceGroups && deviceGroups.length > 0">
-              <q-list separator>
-                  <q-expansion-item
-                    class="q-ma-md"
-                    switch-toggle-side
-                    expand-separator
-                    header-class="text-primary"
-                    :label="deviceGroup.name"
-                    v-for="deviceGroup in deviceGroups" :key="deviceGroup.id">
-                    <q-card class="q-ma-md">
-                      <q-list separator>
-                        <q-item v-for="device in deviceGroup.devices" :key="device.id">
-                          <q-item-section avatar v-if="$q.screen.gt.xs">
-                            <q-icon color="primary" :name="device.connected?'devices':'phonelink_off'" />
-                          </q-item-section>
-                          <q-item-section @click="gotoDevice(device.id)" class="cursor-pointer">
-                            <q-item-label>{{device.name}}</q-item-label>
-                            <q-item-label caption>{{device.deviceType.name}}</q-item-label>
-                          </q-item-section>
-                        </q-item>
-                      </q-list>
-                    </q-card>
-                  </q-expansion-item>
-              </q-list>
-            </q-expansion-item>
           </q-card>
         </q-card-section>
       </q-card>
