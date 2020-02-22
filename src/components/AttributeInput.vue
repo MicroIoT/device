@@ -326,7 +326,7 @@ export default {
         if (definition.type === 'Location') {
           let longitude = value.split(',')[0]
           let latitude = value.split(',')[1]
-          let v = '[' + value.toString() + ']'
+          let v = typeof value !== 'undefined' && value !== null ? '[' + value.toString() + ']' : ''
           return {
             type: definition.type,
             longitude: longitude,
@@ -334,7 +334,7 @@ export default {
             string: v
           }
         } else if (definition.type === 'DateTime') {
-          let v = value.toString()
+          let v = (typeof value !== 'undefined' && value !== null ? value.toString() : '')
           return {
             type: definition.type,
             date: v,
@@ -342,7 +342,7 @@ export default {
             string: v
           }
         } else {
-          let v = value
+          let v = typeof value !== 'undefined' && value !== null ? value : ''
           return {
             type: definition.type,
             value: v,

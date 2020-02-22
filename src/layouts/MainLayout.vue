@@ -123,13 +123,24 @@ export default {
   },
   computed: {
     ...mapGetters({
-      timers: 'getAllTimer'
+      timers: 'getAllTimer',
+      subscribers: 'getAllSubscriber'
     })
   },
   methods: {
     exit () {
+      let value = {}
       for (var key of Object.keys(this.timers)) {
         clearInterval(this.timers[key])
+        value[key] = null
+        this.$store.commit('setTimer', value)
+      }
+      for (var sub of Object.keys(this.subscribers)) {
+        if (this.subscribers[sub] !== null) {
+          stomp.unsubscribe(this.subscribers[sub])
+          value[sub] = null
+          this.$store.commit('setSubscriber', value)
+        }
       }
       stomp.disconnect()
       this.$store.commit('logout')

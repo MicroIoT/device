@@ -7,6 +7,9 @@
           <q-toolbar-title>
             设备组详细信息
           </q-toolbar-title>
+          <q-btn flat round dense icon="refresh" @click="refresh">
+            <q-tooltip>刷新</q-tooltip>
+          </q-btn>
         </q-toolbar>
         <q-card class="q-ma-md">
           <q-card-section>
@@ -74,8 +77,7 @@ export default {
         this.devicegroup = response.data
       })
     },
-    refresh (done) {
-      done()
+    refresh () {
       this.getDevicegroup()
     }
   }

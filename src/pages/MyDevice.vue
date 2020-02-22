@@ -7,6 +7,9 @@
             <q-toolbar-title>
               设备详细信息
             </q-toolbar-title>
+          <q-btn flat round dense :icon="getIcon" @click="subscribe">
+            <q-tooltip>{{subscriber(deviceId) === null ? '订阅告警' : '取消订阅'}}</q-tooltip>
+          </q-btn>
         </q-toolbar>
         <q-card class="q-ma-md">
           <q-card-section>
@@ -93,6 +96,8 @@
 <script>
 import { http } from '../components/http'
 import AttributeValue from '../components/AttributeValue'
+import { stomp } from '../components/stomp'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -117,6 +122,18 @@ export default {
     this.deviceId = this.$route.params.id
     this.getDevice()
   },
+  computed: {
+    ...mapGetters({
+      subscriber: 'getSubscriber'
+    }),
+    getIcon () {
+      if (this.subscriber(this.deviceId) === null) {
+        return 'error'
+      } else {
+        return 'delete'
+      }
+    }
+  },
   methods: {
     gotoGet (attribute) {
       this.$router.push({ path: '/home/devicegroups/get/' + this.deviceId + '/' + attribute })
@@ -136,6 +153,23 @@ export default {
     refresh (done) {
       done()
       this.getDevice()
+    },
+    subscribe () {
+      let value = {}
+      if (this.subscriber(this.deviceId) === null) {
+        let subscription = stomp.subscribe(this.deviceId, (alarm) => {
+          let info = {}
+          info[alarm.id] = alarm
+          this.$store.commit('setMyalarm', info)
+          this.$router.push({ path: '/home/devicegroups/alarminfo/' + alarm.id })
+        })
+        value[this.deviceId] = subscription
+        this.$store.commit('setSubscriber', value)
+      } else {
+        stomp.unsubscribe(this.subscriber(this.deviceId))
+        value[this.deviceId] = null
+        this.$store.commit('setSubscriber', value)
+      }
     }
   }
 }

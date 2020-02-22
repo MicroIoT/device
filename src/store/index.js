@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import user from './user'
+import myalarm from './myalarm'
+import subscriber from './subscriber'
 import timer from './timer'
 import attribute from './attribute'
 import arrays from './arrays'
@@ -46,6 +48,8 @@ const store = new Vuex.Store({
   modules: {
     user,
     timer,
+    subscriber,
+    myalarm,
     attribute,
     arrays,
     action,

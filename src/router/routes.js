@@ -78,6 +78,11 @@ const routes = [
         path: 'devicegroups/action/:id/:action',
         name: 'actiondevice',
         component: () => import('pages/ActionDevice.vue')
+      },
+      {
+        path: 'devicegroups/alarminfo/:alarmid',
+        name: 'alarminfo',
+        component: () => import('pages/AlarmInfo.vue')
       }
     ]
   }

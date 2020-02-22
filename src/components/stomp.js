@@ -6,6 +6,7 @@ import { toDataValue } from './util'
 
 const operationTopic = '/topic/operation.'
 const resultTopic = '/topic/result.'
+const alarmTopic = '/topic/alarm.'
 class StompClient {
   constructor () {
     this.ws = {}
@@ -175,6 +176,20 @@ class StompClient {
         })
       }
     }, 10000)
+  }
+  subscribe (topic, alarmCallback) {
+    let subTopic = alarmTopic + topic
+    let subscription = this.client.subscribe(subTopic, (msg) => {
+      let alarm = JSON.parse(msg.body)
+      let alert = new Audio('./statics/alert.wav')
+      alert.type = 'audio/wav'
+      alert.play()
+      alarmCallback(alarm)
+    })
+    return subscription
+  }
+  unsubscribe (subscription) {
+    subscription.unsubscribe()
   }
 }
 

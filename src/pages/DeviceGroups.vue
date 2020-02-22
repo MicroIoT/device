@@ -49,10 +49,9 @@ export default {
       }
       this.$router.push(page)
     },
-    refresh (done) {
+    refresh () {
       this.deviceGroups = []
       this.getDeviceGroup()
-      done()
     },
     getDeviceGroup () {
       http('get', '/devicegroups/me', null, (response) => {
