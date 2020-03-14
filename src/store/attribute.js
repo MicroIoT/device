@@ -15,8 +15,8 @@ const getters = {
 
 const mutations = {
   initAttribute (state) {
-    let username = JSON.parse(sessionStorage.getItem(keys.USER_STATE)).deviceAccount.username
-    let attributeKey = username + '.' + keys.ATTRIBUTE_STATE
+    let id = JSON.parse(sessionStorage.getItem(keys.USER_STATE)).id
+    let attributeKey = id + '.' + keys.ATTRIBUTE_STATE
     let attribute = window.localStorage.getItem(attributeKey)
     if (attribute === null) {
       Vue.set(state, 'attribute', {})

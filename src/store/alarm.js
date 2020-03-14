@@ -15,8 +15,8 @@ const getters = {
 
 const mutations = {
   initAlarm (state) {
-    let username = JSON.parse(sessionStorage.getItem(keys.USER_STATE)).deviceAccount.username
-    let alarmKey = username + '.' + keys.ALARM_STATE
+    let id = JSON.parse(sessionStorage.getItem(keys.USER_STATE)).id
+    let alarmKey = id + '.' + keys.ALARM_STATE
     let alarm = window.localStorage.getItem(alarmKey)
     if (alarm === null) {
       Vue.set(state, 'alarm', {})

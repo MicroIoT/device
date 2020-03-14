@@ -47,6 +47,9 @@ export function formatDate (date, simple) {
 }
 export function initSystem () {
   stomp.connect()
+  initStore()
+}
+export function initStore () {
   store.commit('initAttribute')
   store.commit('initAction')
   store.commit('initAlarm')

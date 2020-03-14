@@ -115,7 +115,12 @@ export default {
           'values': event,
           'reportTime': formattedString
         }
-        http('post', '/events', info, (response) => {
+        let url = '/events'
+        if (this.$store.getters.getCurrentUser.deviceAccount === null) {
+          info.deviceId = this.$store.getters.getCurrentUser.id
+          url = url + '/subdevice'
+        }
+        http('post', url, info, (response) => {
           this.$q.notify({
             message: this.name + '上报成功',
             color: 'positive'

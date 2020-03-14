@@ -28,8 +28,8 @@ const getters = {
 
 const mutations = {
   initAction (state) {
-    let username = JSON.parse(sessionStorage.getItem(keys.USER_STATE)).deviceAccount.username
-    let actionKey = username + '.' + keys.ACTION_STATE
+    let id = JSON.parse(sessionStorage.getItem(keys.USER_STATE)).id
+    let actionKey = id + '.' + keys.ACTION_STATE
     let action = window.localStorage.getItem(actionKey)
     if (action === null) {
       Vue.set(state, 'action', {})

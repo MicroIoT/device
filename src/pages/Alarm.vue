@@ -108,7 +108,12 @@ export default {
             'alarmType': this.name,
             'reportTime': formattedString
           }
-          http('post', '/alarms', info, (response) => {
+          let url = '/alarms'
+          if (this.$store.getters.getCurrentUser.deviceAccount === null) {
+            info.deviceId = this.$store.getters.getCurrentUser.id
+            url = url + '/subdevice'
+          }
+          http('post', url, info, (response) => {
             this.$q.notify({
               message: this.name + '上报成功',
               color: 'positive'

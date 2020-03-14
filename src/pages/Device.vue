@@ -40,7 +40,38 @@
               <div class="self-center full-width no-outline" tabindex="0">{{getLocation}}</div>
             </template>
           </q-field>
-
+          <q-field stack-label class="q-ma-md" label="网关" v-if="$store.getters.getCurrentUser.gateway !== null">
+            <template v-slot:prepend>
+              <q-icon name="event" color="primary"/>
+            </template>
+            <template v-slot:control  @click="select($store.getters.getCurrentUser.gateway)">
+              <div @click="select($store.getters.getCurrentUser.gateway)" class="self-center full-width no-outline" tabindex="0">{{$store.getters.getCurrentUser.gateway.string}}</div>
+            </template>
+            <template v-slot:append>
+              <q-btn color="primary" @click="select($store.getters.getCurrentUser.gateway)">切换</q-btn>
+            </template>
+          </q-field>
+            <q-expansion-item
+              class="q-ma-md"
+              switch-toggle-side
+              expand-separator
+              header-class="text-primary"
+              label="子设备"
+              v-if="subdevices.length > 0">
+              <q-list separator>
+                <q-item v-for="(value, key) in subdevices" :key="key">
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="devices" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label @click="select(value)" class="cursor-pointer">{{value.string}}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side >
+                    <q-btn color="primary" @click="select(value)">切换</q-btn>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-expansion-item>
             <AttributeValue title="设备静态属性" :attributeValue="$store.getters.getCurrentUser.attributes" v-if="$store.getters.getCurrentUser.attributes && Object.keys($store.getters.getCurrentUser.attributes).length > 0"/>
           </q-card>
         </q-card-section>
@@ -52,6 +83,8 @@
 <script>
 import AttributeValue from '../components/AttributeValue'
 import { http } from '../components/http'
+import { stomp } from '../components/stomp'
+import { initStore } from '../components/util'
 
 export default {
   components: {
@@ -60,7 +93,7 @@ export default {
   name: 'device',
   data () {
     return {
-      deviceGroups: ''
+      subdevices: []
     }
   },
   computed: {
@@ -71,12 +104,20 @@ export default {
     }
   },
   created: function () {
-    this.getDeviceGroup()
+    this.getSubDevices()
   },
   methods: {
-    getDeviceGroup () {
-      http('get', '/devicegroups/me', null, (response) => {
-        this.deviceGroups = response.data
+    select (device) {
+      stomp.unSubscription()
+      this.$store.commit('login', device)
+      this.getSubDevices()
+      stomp.manageSubscription()
+      initStore()
+    },
+    getSubDevices () {
+      let url = '/devices/subdevice/' + this.$store.getters.getCurrentUser.id
+      http('get', url, '', (response) => {
+        this.subdevices = response.data
       })
     },
     gotoDeviceType () {

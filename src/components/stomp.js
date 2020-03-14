@@ -11,7 +11,9 @@ class StompClient {
   constructor () {
     this.ws = {}
     this.client = {}
-    this.subscriptions = new Map()
+    this.getSub = {}
+    this.setSub = {}
+    this.actionSub = {}
   }
   connect () {
     let wsUrl = store.getters.getWs + store.getters.getServer + '/ws_iot'
@@ -50,7 +52,7 @@ class StompClient {
 
   manageSubscription () {
     let deviceId = store.getters.getCurrentUser.id
-    this.client.subscribe(operationTopic + 'get.' + deviceId, (msg) => {
+    this.getSub = this.client.subscribe(operationTopic + 'get.' + deviceId, (msg) => {
       let request = JSON.parse(msg.body)
       let value = store.getters.getAttribute(request.attribute)
       let topic = resultTopic + 'get.' + deviceId + '.' + request.requestId
@@ -73,7 +75,7 @@ class StompClient {
         })
       }
     })
-    this.client.subscribe(operationTopic + 'set.' + deviceId, (msg) => {
+    this.setSub = this.client.subscribe(operationTopic + 'set.' + deviceId, (msg) => {
       let request = JSON.parse(msg.body)
       let topic = resultTopic + 'set.' + deviceId + '.' + request.requestId
       let type = store.getters.getCurrentUser.deviceType.attDefinition[request.attribute].dataType
@@ -86,7 +88,7 @@ class StompClient {
         color: 'positive'
       })
     })
-    this.client.subscribe(operationTopic + 'action.' + deviceId, (msg) => {
+    this.actionSub = this.client.subscribe(operationTopic + 'action.' + deviceId, (msg) => {
       let request = JSON.parse(msg.body)
       let resp = store.getters.getActionResponse(request.action)
       let topic = resultTopic + 'action.' + deviceId + '.' + request.requestId
@@ -117,11 +119,13 @@ class StompClient {
       }
     })
   }
-
+  unSubscription () {
+    this.getSub.unsubscribe()
+    this.setSub.unsubscribe()
+    this.actionSub.unsubscribe()
+  }
   disconnect () {
-    this.subscriptions.forEach(subscription => {
-      subscription.unsubscribe()
-    })
+    this.unSubscription()
     if (typeof this.client.disconnect === 'function') {
       this.client.disconnect(() => {
       })
