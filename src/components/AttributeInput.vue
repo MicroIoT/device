@@ -57,9 +57,9 @@
         </q-field>
         <AttributeInput :attDefinition="getStructInfo(value.dataType.attTypes)" v-else-if="value.dataType.type === 'Struct'" type="Struct" :ref="key" :indexName="getIndexName(key)" :edit="edit"/>
         <AttributeInput :attDefinition="getArrayInfo(value.dataType, value.optional)" v-else-if="value.dataType.type === 'Array'"  type="Array" :ref="key" :indexName="getIndexName(key)" :edit="edit"/>
-        <AttributeInput :attDefinition="getChoiceInfo(value.dataType.attTypes, value.selected)" v-else  type="Choice" :ref="key" :indexName="getIndexName(key)" :edit="edit"/>
+        <AttributeInput :attDefinition="getChoiceInfo(value.dataType.attTypes, choice)" v-else  type="Choice" :ref="key" :indexName="getIndexName(key)" :edit="edit"/>
         <q-stepper-navigation content>
-          <q-select label="选择" v-if="value.dataType.type === 'Choice'" :readonly="!edit" :options="getChoice(value.dataType.attTypes)" v-model="value.selected"></q-select>
+          <q-select label="选择" v-if="value.dataType.type === 'Choice'" :readonly="!edit" :options="getChoice(value.dataType.attTypes)" @input="($value) => { setChoiceValue($value, value) }" :value="getChoiceValue(choice, value.dataType.attTypes)"></q-select>
           <div class="q-gutter-xs q-my-xs">
             <q-btn color="primary" label="继续" @click="clickCheck(key, value, true)" v-if="showDownward(index)"></q-btn>
             <q-btn color="primary" label="回退" @click="clickCheck(key, value, false)" v-if="showUpward(index)"></q-btn>
@@ -93,14 +93,6 @@ export default {
       if (this.type === 'Array') {
         return this.$store.getters.arrayDefinition(this.indexName)
       } else {
-        for (var key in this.attDefinition) {
-          if (this.attDefinition[key].dataType.type === 'Choice') {
-            if (this.attDefinition[key].selected === undefined) {
-              let selected = Object.keys(this.attDefinition[key].dataType.attTypes)[0]
-              this.$set(this.attDefinition[key], 'selected', selected)
-            }
-          }
-        }
         return this.attDefinition
       }
     },
@@ -520,6 +512,15 @@ export default {
       let info = {}
       info[key] = attTypes[key]
       return info
+    },
+    getChoiceValue (choice, value) {
+      let c = choice === '' ? Object.keys(value)[0] : choice
+      this.choice = c
+      return c
+    },
+    setChoiceValue (value, v) {
+      v.input = {}
+      this.choice = value
     }
   }
 }
